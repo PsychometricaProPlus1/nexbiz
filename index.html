@@ -4,39 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rate Your Experience</title>
-
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Inter font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
   <style>
     body{font-family:'Inter',sans-serif;}
-
-    /* star control */
     .star-set{display:flex;flex-direction:row-reverse;justify-content:center;gap:.25rem;margin:1rem 0;}
     .star-set input{display:none}
-    .star-set label{font-size:2.1rem;cursor:pointer;color:#d1d5db;transition:color .25s}
+    .star-set label{font-size:2.1rem;cursor:pointer;color:#d1d5db;transition:color .25s;}
     .star-set label::before{content:'★'}
     .star-set input:checked~label,
     .star-set label:hover,
     .star-set label:hover~label{color:#fbbf24}
-
-    /* modal */
     .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:50;}
     .hidden{display:none}
   </style>
 </head>
 <body class="bg-slate-100 flex items-center justify-center min-h-screen p-4">
-
-  <!-- Card -->
   <div class="bg-white shadow-xl rounded-lg p-8 w-full max-w-md text-center">
       <img src="https://raw.githubusercontent.com/tailwindlabs/heroicons/master/optimized/solid/star.svg" alt="Rate Us" class="w-16 h-16 mx-auto text-amber-400 mb-4" />
-
       <h1 class="text-2xl font-semibold text-slate-800 mb-1">How was your experience?</h1>
       <p class="text-slate-500 mb-6">Tap the stars below to rate us</p>
-
       <div id="selector" class="star-set">
         <input type="radio" id="s5" name="rating" value="5"><label for="s5"></label>
         <input type="radio" id="s4" name="rating" value="4"><label for="s4"></label>
@@ -45,72 +32,41 @@
         <input type="radio" id="s1" name="rating" value="1"><label for="s1"></label>
       </div>
   </div>
-
-  <!-- Positive modal -->
   <div id="goodModal" class="backdrop hidden">
     <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-8 relative">
         <button class="absolute top-2 right-4 text-2xl leading-none text-slate-400 hover:text-slate-600" data-close>&times;</button>
-
         <h2 class="text-xl font-semibold text-emerald-600 mb-2">We're glad you loved us!</h2>
         <p class="text-slate-600 mb-6">Would you mind sharing your experience on Google?</p>
-
         <div class="star-set pointer-events-none mb-6">
             <label style="color:#fbbf24"></label><label style="color:#fbbf24"></label><label style="color:#fbbf24"></label><label style="color:#fbbf24"></label><label style="color:#fbbf24"></label>
         </div>
-
         <a href="https://search.google.com/local/writereview?placeid=ChIJ1b_GBgC3wjsR9t-a4dIKlI4" target="_blank" rel="noopener noreferrer" class="block w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-lg transition active:scale-95">Write a Google Review</a>
     </div>
   </div>
-
-  <!-- Negative modal -->
   <div id="badModal" class="backdrop hidden">
       <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-8 relative">
           <button class="absolute top-2 right-4 text-2xl leading-none text-slate-400 hover:text-slate-600" data-close>&times;</button>
-
           <h2 class="text-xl font-semibold text-rose-600 mb-2">We're sorry to hear that!</h2>
           <p class="text-slate-600 mb-4">Please let us know how we can improve:</p>
-
           <form id="fbForm" action="https://formsubmit.co/equimedia3@gmail.com" method="POST" class="space-y-4">
               <textarea name="message" rows="5" class="w-full border rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-slate-400" placeholder="Your feedback..."></textarea>
-
               <input type="email" name="email" class="w-full border rounded-md p-3" placeholder="Your email (optional)">
-
               <input type="hidden" name="_subject" value="Low Rating Feedback" />
               <input type="hidden" name="_template" value="table" />
-              <input type="hidden" name="_next" value="https://equimedia.github.io/thanks.html" />
-              <!-- Honeypot -->
+              <input type="hidden" name="_next" value="https://nexbiz.ratemybiz.in.net/thank.html" />
+              <input type="hidden" name="_captcha" value="false" />
               <input type="text" name="_honey" style="display:none" />
-
               <button type="submit" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-semibold py-3 rounded-lg transition active:scale-95">Send Feedback</button>
-
               <p id="msg" class="text-center text-sm text-slate-500"></p>
           </form>
       </div>
   </div>
-
   <script>
-  const selector = document.getElementById('selector');
-  const goodModal = document.getElementById('goodModal');
-  const badModal  = document.getElementById('badModal');
-
-  selector.addEventListener('change', e => {
-      const val = +e.target.value;
-      (val < 4 ? badModal : goodModal).classList.remove('hidden');
-  });
-
-  document.querySelectorAll('[data-close]').forEach(btn => btn.addEventListener('click', () => btn.closest('.backdrop').classList.add('hidden')));
-
-  // simple front validation
-  const f = document.getElementById('fbForm');
-  const m = document.getElementById('msg');
-  f.addEventListener('submit', ev => {
-      if (!f.message.value.trim()) {
-          ev.preventDefault();
-          m.textContent = 'Please write a quick message.';
-      } else {
-          m.textContent = 'Sending...';
-      }
-  });
+    const selector=document.getElementById('selector');
+    const goodModal=document.getElementById('goodModal');
+    const badModal=document.getElementById('badModal');
+    selector.addEventListener('change',e=>{(+e.target.value<4?badModal:goodModal).classList.remove('hidden');});
+    document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>b.closest('.backdrop').classList.add('hidden')));
   </script>
 </body>
 </html>
