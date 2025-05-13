@@ -3,70 +3,76 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rate Your Experience</title>
+  <title>We value your feedback</title>
+
+  <!-- Tailwind CSS (no build step) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    body{font-family:'Inter',sans-serif;}
-    .star-set{display:flex;flex-direction:row-reverse;justify-content:center;gap:.25rem;margin:1rem 0;}
-    .star-set input{display:none}
-    .star-set label{font-size:2.1rem;cursor:pointer;color:#d1d5db;transition:color .25s;}
-    .star-set label::before{content:'★'}
-    .star-set input:checked~label,
-    .star-set label:hover,
-    .star-set label:hover~label{color:#fbbf24}
-    .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:50;}
-    .hidden{display:none}
-  </style>
+  <style>body{font-family:'Inter',sans-serif;}</style>
 </head>
 <body class="bg-slate-100 flex items-center justify-center min-h-screen p-4">
-  <div class="bg-white shadow-xl rounded-lg p-8 w-full max-w-md text-center">
-      <img src="https://raw.githubusercontent.com/tailwindlabs/heroicons/master/optimized/solid/star.svg" alt="Rate Us" class="w-16 h-16 mx-auto text-amber-400 mb-4" />
-      <h1 class="text-2xl font-semibold text-slate-800 mb-1">How was your experience?</h1>
-      <p class="text-slate-500 mb-6">Tap the stars below to rate us</p>
-      <div id="selector" class="star-set">
-        <input type="radio" id="s5" name="rating" value="5"><label for="s5"></label>
-        <input type="radio" id="s4" name="rating" value="4"><label for="s4"></label>
-        <input type="radio" id="s3" name="rating" value="3"><label for="s3"></label>
-        <input type="radio" id="s2" name="rating" value="2"><label for="s2"></label>
-        <input type="radio" id="s1" name="rating" value="1"><label for="s1"></label>
-      </div>
-  </div>
-  <div id="goodModal" class="backdrop hidden">
-    <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-8 relative">
-        <button class="absolute top-2 right-4 text-2xl leading-none text-slate-400 hover:text-slate-600" data-close>&times;</button>
-        <h2 class="text-xl font-semibold text-emerald-600 mb-2">We're glad you loved us!</h2>
-        <p class="text-slate-600 mb-6">Would you mind sharing your experience on Google?</p>
-        <div class="star-set pointer-events-none mb-6">
-            <label style="color:#fbbf24"></label><label style="color:#fbbf24"></label><label style="color:#fbbf24"></label><label style="color:#fbbf24"></label><label style="color:#fbbf24"></label>
-        </div>
-        <a href="https://search.google.com/local/writereview?placeid=ChIJ1b_GBgC3wjsR9t-a4dIKlI4" target="_blank" rel="noopener noreferrer" class="block w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-lg transition active:scale-95">Write a Google Review</a>
+  <!-- ── Feedback card ─────────────────────────────── -->
+  <div class="bg-white shadow-xl rounded-xl p-8 max-w-md w-full text-center animate-fade-in">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-14 h-14 mx-auto text-amber-400 mb-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21 16.54 13.97 22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    <h1 class="text-2xl font-semibold text-slate-800 mb-2">Help us get better!</h1>
+    <p class="text-slate-600 mb-6">Choose how you’d like to share your experience. <br class="hidden sm:block">All feedback—good or bad—is welcome.</p>
+
+    <div class="space-y-4">
+      <!-- Public review button (always available) -->
+      <a href="https://search.google.com/local/writereview?placeid=ChIJ1b_GBgC3wjsR9t-a4dIKlI4" target="_blank" rel="noopener noreferrer" class="block w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-lg transition active:scale-95">
+        ⭐ Leave a Google Review (public)
+      </a>
+
+      <!-- Private feedback trigger -->
+      <button id="openForm" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold py-3 rounded-lg transition active:scale-95">
+        ✉️ Send Feedback to Us (private)
+      </button>
     </div>
   </div>
-  <div id="badModal" class="backdrop hidden">
-      <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-8 relative">
-          <button class="absolute top-2 right-4 text-2xl leading-none text-slate-400 hover:text-slate-600" data-close>&times;</button>
-          <h2 class="text-xl font-semibold text-rose-600 mb-2">We're sorry to hear that!</h2>
-          <p class="text-slate-600 mb-4">Please let us know how we can improve:</p>
-          <form id="fbForm" action="https://formsubmit.co/equimedia3@gmail.com" method="POST" class="space-y-4">
-              <textarea name="message" rows="5" class="w-full border rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-slate-400" placeholder="Your feedback..."></textarea>
-              <input type="email" name="email" class="w-full border rounded-md p-3" placeholder="Your email (optional)">
-              <input type="hidden" name="_subject" value="Low Rating Feedback" />
-              <input type="hidden" name="_template" value="table" />
-              <input type="hidden" name="_next" value="https://nexbiz.ratemybiz.in.net/thanks.html" />
-              <input type="hidden" name="_captcha" value="false" />
-              <input type="text" name="_honey" style="display:none" />
-              <button type="submit" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-semibold py-3 rounded-lg transition active:scale-95">Send Feedback</button>
-              <p id="msg" class="text-center text-sm text-slate-500"></p>
-          </form>
-      </div>
+
+  <!-- ── Private‑feedback modal ─────────────────────── -->
+  <div id="feedbackModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-8 relative animate-slide-up">
+      <button id="closeForm" class="absolute top-2 right-4 text-2xl leading-none text-slate-400 hover:text-slate-600">&times;</button>
+      <h2 class="text-xl font-semibold text-slate-800 mb-2">Tell us more — privately</h2>
+      <p class="text-slate-600 mb-4">Your comments come straight to our team and won’t be shared publicly.</p>
+
+      <form id="fbForm" action="https://formsubmit.co/equimedia3@gmail.com" method="POST" class="space-y-4">
+        <textarea name="message" rows="5" class="w-full border rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-slate-400" placeholder="Your feedback..."></textarea>
+        <input type="email" name="email" class="w-full border rounded-md p-3" placeholder="Your email (optional)">
+
+        <!-- FormSubmit helpers -->
+        <input type="hidden" name="_subject" value="Website feedback" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" /> <!-- removes visible reCAPTCHA badge -->
+        <input type="hidden" name="_next" value="https://nexbiz.ratemybiz.in.net/thank.html" />
+        <!-- Honeypot field -->
+        <input type="text" name="_honey" style="display:none" />
+
+        <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-lg transition active:scale-95">Send Feedback</button>
+        <p id="msg" class="text-center text-sm text-slate-500"></p>
+      </form>
+    </div>
   </div>
+
   <script>
-    const selector=document.getElementById('selector');
-    const goodModal=document.getElementById('goodModal');
-    const badModal=document.getElementById('badModal');
-    selector.addEventListener('change',e=>{(+e.target.value<4?badModal:goodModal).classList.remove('hidden');});
-    document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>b.closest('.backdrop').classList.add('hidden')));
+    const modal   = document.getElementById('feedbackModal');
+    const openBtn = document.getElementById('openForm');
+    const closeBtn= document.getElementById('closeForm');
+    const form    = document.getElementById('fbForm');
+    const msg     = document.getElementById('msg');
+
+    openBtn.addEventListener('click', ()=> modal.classList.remove('hidden'));
+    closeBtn.addEventListener('click', ()=> modal.classList.add('hidden'));
+
+    form.addEventListener('submit', ev => {
+      if(!form.message.value.trim()){
+        ev.preventDefault();
+        msg.textContent='Please write a short message before sending.';
+      } else {
+        msg.textContent='Sending…';
+      }
+    });
   </script>
 </body>
 </html>
