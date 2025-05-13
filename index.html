@@ -3,43 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Rate Your Experience</title>
+  <title>Rate Your Experience</title>
 
-  <!-- Tailwind (just for quick styling) -->
+  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    body            { font-family: 'Inter', sans-serif; }
-    /* ★ star widget (pure CSS, no icons) */
-    .star-rating    { display:flex; flex-direction:row-reverse; justify-content:center; gap:.3rem; margin-block:1rem; }
-    .star-rating input { display:none; }
-    .star-rating label{ cursor:pointer; font-size:2.2rem; color:#d1d5db; user-select:none; transition:color .25s; }
-    .star-rating label::before{ content:"★"; }
+    body            {font-family:'Inter',sans-serif;}
+    /* ★ stars */
+    .star-rating    {display:flex;flex-direction:row-reverse;justify-content:center;gap:.3rem;margin-block:1rem}
+    .star-rating input{display:none}
+    .star-rating label{cursor:pointer;font-size:2.2rem;color:#d1d5db;user-select:none;transition:color .25s}
+    .star-rating label::before{content:"★"}
     .star-rating label:hover,
-    .star-rating label:hover ~ label,
-    .star-rating input:checked ~ label{ color:#facc15; }      /* amber‑400 */
+    .star-rating label:hover~label,
+    .star-rating input:checked~label{color:#facc15}
 
-    /* quick modal */
-    .modal-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.55); display:flex; align-items:center; justify-content:center; z-index:50; }
-    .modal-hidden  { display:none; }
+    /* modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:50}
+    .modal-hidden{display:none}
   </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 
-  <!-- ===== Trigger Card ===== -->
+  <!-- ─────────────── Trigger card ─────────────── -->
   <div class="bg-white shadow-xl rounded-lg p-8 w-full max-w-md">
-    <!-- ⭐ your banner image -->
     <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi5ljGO5l3HYGTvCe-oeuAqZOhtK1eWSIG2H9t2H_twqIJgr9aYezagLnx0D-EQUGHOiu_aPeHJLDcC0i4UWizyvqUGTcTAXA2WcO1qd49FxslO5Np97Kl1AEAo8W9NZKhGLdmGVMmUPceDhfSZ62koGO0CJr64CuX-BFIfx1w8EuJnGOh4LbK4u46YACIW/w320-h207/rateus.png" alt="Rate Us" class="w-40 mx-auto mb-4">
 
     <h1 class="text-center text-2xl font-semibold text-blue-600 mb-6">
       How was your experience?
     </h1>
-    <p class="text-center text-gray-600 mb-4">
-      Tap the stars to leave feedback
-    </p>
+    <p class="text-center text-gray-600 mb-4">Tap the stars to leave feedback</p>
 
-    <!-- Inline star picker (opens modals) -->
+    <!-- inline stars -->
     <div id="inlineRating" class="star-rating">
       <input type="radio" id="i5" name="inline" value="5"><label for="i5"></label>
       <input type="radio" id="i4" name="inline" value="4"><label for="i4"></label>
@@ -49,17 +46,13 @@
     </div>
   </div>
 
-  <!-- ===== Great‑rating modal ===== -->
+  <!-- ─────────────── Good‑rating modal ─────────────── -->
   <div id="modalGood" class="modal-backdrop modal-hidden">
     <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-8 relative">
       <button class="absolute top-2 right-3 text-xl leading-none text-gray-500 hover:text-gray-700" data-close>&times;</button>
 
-      <h2 class="text-xl font-semibold mb-4 text-center">
-        Thanks, we’re glad you loved it!
-      </h2>
-      <p class="text-center text-gray-700 mb-6">
-        Would you share the love on Google?
-      </p>
+      <h2 class="text-xl font-semibold mb-4 text-center">Thanks, we’re glad you loved us!</h2>
+      <p class="text-center text-gray-700 mb-6">Could you share the love on Google?</p>
 
       <div class="flex justify-center mb-6 pointer-events-none">
         <div class="star-rating">
@@ -67,34 +60,45 @@
         </div>
       </div>
 
-      <button id="btnGoogle" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition active:scale-95">
+      <!-- normal anchor so browsers do NOT treat it as a pop‑up -->
+      <a href="https://search.google.com/local/writereview?placeid=ChIJ1b_GBgC3wjsR9t-a4dIKlI4"
+         target="_blank" rel="noopener noreferrer"
+         class="block text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition active:scale-95">
         Write a Google Review
-      </button>
+      </a>
     </div>
   </div>
 
-  <!-- ===== Low‑rating modal ===== -->
+  <!-- ─────────────── Low‑rating modal ─────────────── -->
   <div id="modalBad" class="modal-backdrop modal-hidden">
     <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-8 relative">
       <button class="absolute top-2 right-3 text-xl leading-none text-gray-500 hover:text-gray-700" data-close>&times;</button>
 
-      <h2 class="text-xl font-semibold mb-4 text-center">
-        We’re sorry! How can we improve?
-      </h2>
+      <h2 class="text-xl font-semibold mb-4 text-center">We’re sorry! Tell us how to improve.</h2>
 
       <form id="feedbackForm"
-            action="https://formsubmit.io/send/equimedia3@gmail.com"
+            action="https://formsubmit.co/[email protected]"
             method="POST"
-            class="space-y-4"
-            novalidate>
+            class="space-y-4">
         <textarea name="message" rows="5"
                   class="w-full border rounded shadow-sm px-4 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  placeholder="Your feedback helps us do better..."></textarea>
+                  placeholder="Your feedback helps us get better..."></textarea>
+
+        <!-- 📧 reply‑to address (optional) -->
+        <input type="email" name="email" placeholder="Your email (optional)"
+               class="w-full border rounded shadow-sm px-4 py-2">
 
         <!-- FormSubmit helpers -->
-        <input type="hidden" name="_subject"  value="Low Rating Feedback (Website)">
+        <input type="hidden" name="_subject" value="Low Rating Feedback (Website)">
         <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_captcha"  value="false">
+        <!-- KEEP reCAPTCHA! -->
+        <!--<input type="hidden" name="_captcha" value="false">-->
+
+        <!-- Honeypot (spam trap) -->
+        <input type="text" name="_honey" style="display:none">
+
+        <!-- Custom thank‑you page (optional) -->
+        <input type="hidden" name="_next" value="https://yourdomain.com/thanks.html">
 
         <button type="submit"
                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition active:scale-95">
@@ -107,52 +111,34 @@
   </div>
 
   <script>
-    /* ===== Config ===== */
-    const WRITE_URL = "https://search.google.com/local/writereview?placeid=ChIJ1b_GBgC3wjsR9t-a4dIKlI4";
+    /* refs */
+    const inline = document.getElementById('inlineRating');
+    const modalGood = document.getElementById('modalGood');
+    const modalBad  = document.getElementById('modalBad');
 
-    /* ===== DOM refs ===== */
-    const inline    = document.getElementById("inlineRating");
-    const modalGood = document.getElementById("modalGood");
-    const modalBad  = document.getElementById("modalBad");
-    const btnGoogle = document.getElementById("btnGoogle");
+    /* star click handler */
+    inline.addEventListener('change', e => {
+      const v = +e.target.value;
+      (v < 3 ? modalBad : modalGood).classList.remove('modal-hidden');
+    });
 
-    /* ===== Click on inline stars ===== */
-    inline.addEventListener("change", e => {
-      const val = e.target.value;
-      if (val === "1" || val === "2") {
-        modalBad.classList.remove("modal-hidden");
+    /* generic close handler */
+    document.querySelectorAll('[data-close]').forEach(b =>
+      b.addEventListener('click', () =>
+        b.closest('.modal-backdrop').classList.add('modal-hidden')));
+
+    /* lightweight front‑end validation */
+    const fForm   = document.getElementById('feedbackForm');
+    const feedMsg = document.getElementById('feedMsg');
+
+    fForm.addEventListener('submit', ev => {
+      if (!fForm.message.value.trim()) {
+        ev.preventDefault();
+        feedMsg.textContent = 'Please write a short message before sending.';
       } else {
-        modalGood.classList.remove("modal-hidden");
+        feedMsg.textContent = 'Sending…';
       }
-    });
-
-    /* ===== Close buttons ===== */
-    document.querySelectorAll("[data-close]").forEach(btn => {
-      btn.addEventListener("click", () =>
-        btn.closest(".modal-backdrop").classList.add("modal-hidden")
-      );
-    });
-
-    /* ===== Google review button ===== */
-    btnGoogle.addEventListener("click", () => {
-      window.open(WRITE_URL, "_blank", "noopener");
-    });
-
-    /* ===== Low‑rating form validation ===== */
-    const fForm = document.getElementById("feedbackForm");
-    const feedMsg = document.getElementById("feedMsg");
-
-    fForm.addEventListener("submit", ev => {
-      ev.preventDefault();
-      const txt = fForm.message.value.trim();
-      if (!txt) {
-        feedMsg.textContent = "Please add some details.";
-        return;
-      }
-      feedMsg.textContent = "Sending…";
-      fForm.submit();              // native submit to FormSubmit.io
     });
   </script>
 </body>
 </html>
-
