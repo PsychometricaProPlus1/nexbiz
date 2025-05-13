@@ -1,128 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Rate Your Experience</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rate Your Experience</title>
 
-  <!-- Tailwind CDN -->
+  <!-- Tailwind CSS CDN → quick, no build‑step needed -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Inter font (clean professional look) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <style>
-    body            {font-family:'Inter',sans-serif;}
-    /* ★ stars */
-    .star-rating    {display:flex;flex-direction:row-reverse;justify-content:center;gap:.3rem;margin-block:1rem}
-    .star-rating input{display:none}
-    .star-rating label{cursor:pointer;font-size:2.2rem;color:#d1d5db;user-select:none;transition:color .25s}
-    .star-rating label::before{content:"★"}
-    .star-rating label:hover,
-    .star-rating label:hover~label,
-    .star-rating input:checked~label{color:#facc15}
+    /* use Inter everywhere */
+    body { font-family: "Inter", sans-serif; }
 
-    /* modal */
-    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:50}
-    .modal-hidden{display:none}
+    /* ------------- stars ------------- */
+    .stars {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: center;
+      gap: .35rem;
+    }
+    .stars input { display: none; }
+    .stars label {
+      font-size: 2.5rem;
+      cursor: pointer;
+      color: #d1d5db; /* gray‑300 */
+      transition: color 0.25s;
+      user-select: none;
+    }
+    /* hover states */
+    .stars label:hover,
+    .stars label:hover ~ label { color: #fcd34d;/*amber‑300*/ }
+    /* selected state */
+    .stars input:checked ~ label { color: #fbbf24;/*amber‑400*/ }
+
+    /* ------------- modal ------------- */
+    .modal {
+      @apply fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50;
+    }
+    .modal.hidden { display: none; }
   </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-emerald-50 p-4">
 
-  <!-- ─────────────── Trigger card ─────────────── -->
-  <div class="bg-white shadow-xl rounded-lg p-8 w-full max-w-md">
-    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi5ljGO5l3HYGTvCe-oeuAqZOhtK1eWSIG2H9t2H_twqIJgr9aYezagLnx0D-EQUGHOiu_aPeHJLDcC0i4UWizyvqUGTcTAXA2WcO1qd49FxslO5Np97Kl1AEAo8W9NZKhGLdmGVMmUPceDhfSZ62koGO0CJr64CuX-BFIfx1w8EuJnGOh4LbK4u46YACIW/w320-h207/rateus.png" alt="Rate Us" class="w-40 mx-auto mb-4">
+  <!-- ─────────── Trigger card ─────────── -->
+  <div class="bg-white w-full max-w-md rounded-2xl shadow-xl p-8">
+    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi5ljGO5l3HYGTvCe-oeuAqZOhtK1eWSIG2H9t2H_twqIJgr9aYezagLnx0D-EQUGHOiu_aPeHJLDcC0i4UWizyvqUGTcTAXA2WcO1qd49FxslO5Np97Kl1AEAo8W9NZKhGLdmGVMmUPceDhfSZ62koGO0CJr64CuX-BFIfx1w8EuJnGOh4LbK4u46YACIW/w320-h207/rateus.png" alt="Rate us" class="w-40 mx-auto mb-4 select-none" />
 
-    <h1 class="text-center text-2xl font-semibold text-blue-600 mb-6">
-      How was your experience?
-    </h1>
-    <p class="text-center text-gray-600 mb-4">Tap the stars to leave feedback</p>
+    <h1 class="text-2xl font-semibold text-center text-sky-700 mb-2">How was your experience?</h1>
+    <p class="text-center text-gray-600 mb-6">Tap a star to let us know</p>
 
-    <!-- inline stars -->
-    <div id="inlineRating" class="star-rating">
-      <input type="radio" id="i5" name="inline" value="5"><label for="i5"></label>
-      <input type="radio" id="i4" name="inline" value="4"><label for="i4"></label>
-      <input type="radio" id="i3" name="inline" value="3"><label for="i3"></label>
-      <input type="radio" id="i2" name="inline" value="2"><label for="i2"></label>
-      <input type="radio" id="i1" name="inline" value="1"><label for="i1"></label>
+    <!-- Stars → inline rating selection -->
+    <div id="starGroup" class="stars">
+      <input type="radio" id="s5" name="rating" value="5" /><label for="s5">★</label>
+      <input type="radio" id="s4" name="rating" value="4" /><label for="s4">★</label>
+      <input type="radio" id="s3" name="rating" value="3" /><label for="s3">★</label>
+      <input type="radio" id="s2" name="rating" value="2" /><label for="s2">★</label>
+      <input type="radio" id="s1" name="rating" value="1" /><label for="s1">★</label>
     </div>
   </div>
 
-  <!-- ─────────────── Good‑rating modal ─────────────── -->
-  <div id="modalGood" class="modal-backdrop modal-hidden">
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-8 relative">
-      <button class="absolute top-2 right-3 text-xl leading-none text-gray-500 hover:text-gray-700" data-close>&times;</button>
+  <!-- ─────────── Positive‑rating modal ─────────── -->
+  <div id="modalGood" class="modal hidden">
+    <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-8 relative">
+      <button data-close class="absolute top-2 right-3 text-2xl font-light text-gray-400 hover:text-gray-600">&times;</button>
 
-      <h2 class="text-xl font-semibold mb-4 text-center">Thanks, we’re glad you loved us!</h2>
-      <p class="text-center text-gray-700 mb-6">Could you share the love on Google?</p>
+      <h2 class="text-xl font-semibold text-center text-emerald-600 mb-2">Thank you for the love! ⭐</h2>
+      <p class="text-center text-gray-600 mb-6">Could you share a public review on Google?</p>
 
-      <div class="flex justify-center mb-6 pointer-events-none">
-        <div class="star-rating">
-          <label style="color:#facc15"></label><label style="color:#facc15"></label><label style="color:#facc15"></label><label style="color:#facc15"></label><label style="color:#facc15"></label>
-        </div>
-      </div>
+      <a href="https://search.google.com/local/writereview?placeid=ChIJ1b_GBgC3wjsR9t-a4dIKlI4" target="_blank" rel="noopener noreferrer" class="block bg-emerald-500 hover:bg-emerald-600 text-white font-medium text-center py-3 rounded-lg active:scale-95 transition transform">Write a Google review</a>
 
-      <!-- normal anchor so browsers do NOT treat it as a pop‑up -->
-      <a href="https://search.google.com/local/writereview?placeid=ChIJ1b_GBgC3wjsR9t-a4dIKlI4"
-         target="_blank" rel="noopener noreferrer"
-         class="block text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition active:scale-95">
-        Write a Google Review
-      </a>
+      <p class="mt-4 text-xs text-center text-gray-400">(Opens in a new tab)</p>
     </div>
   </div>
 
-  <!-- ─────────────── Low‑rating modal ─────────────── -->
-  <div id="modalBad" class="modal-backdrop modal-hidden">
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-8 relative">
-      <button class="absolute top-2 right-3 text-xl leading-none text-gray-500 hover:text-gray-700" data-close>&times;</button>
+  <!-- ─────────── Low‑rating modal ─────────── -->
+  <div id="modalBad" class="modal hidden">
+    <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-8 relative">
+      <button data-close class="absolute top-2 right-3 text-2xl font-light text-gray-400 hover:text-gray-600">&times;</button>
 
-      <h2 class="text-xl font-semibold mb-4 text-center">We’re sorry! Tell us how to improve.</h2>
-<form id="feedbackForm"
-      action="https://formsubmit.co/equimedia3@gmail.com"
-      method="POST" class="space-y-4">
+      <h2 class="text-xl font-semibold text-center text-rose-600 mb-2">We’re sorry! 😔</h2>
+      <p class="text-center text-gray-600 mb-6">Please tell us what went wrong – your feedback goes straight to management.</p>
 
-  <textarea name="message" rows="5" placeholder="Your feedback…"></textarea>
+      <form id="feedbackForm" action="https://formsubmit.co/equimedia3@gmail.com" method="POST" class="space-y-4">
+        <textarea name="message" rows="5" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-1 focus:ring-rose-400 focus:outline-none resize-y" placeholder="Your feedback helps us improve…"></textarea>
 
-  <input type="email" name="email" placeholder="Your email (optional)">
+        <input type="email" name="email" placeholder="Your email (optional)" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-1 focus:ring-rose-400 focus:outline-none" />
 
-  <!-- helpers -->
-  <input type="hidden" name="_subject" value="Low Rating Feedback (Website)">
-  <input type="hidden" name="_template" value="table">
-  <input type="hidden" name="_next" value="https://yourdomain.com/thanks.html">
-  <!-- bot traps -->
-  <input type="text"   name="_honey"  style="display:none">
+        <!-- FormSubmit helpers -->
+        <input type="hidden" name="_subject" value="Low‑Rating Feedback" />
+        <input type="hidden" name="_template" value="table" />
+        <!-- optional thank‑you page -->
+        <input type="hidden" name="_next" value="https://yourdomain.com/thanks.html" />
 
-  <button type="submit">Send Feedback</button>
-</form>
+        <!-- bot trap – leave blank! -->
+        <input type="text" name="_honey" class="hidden" />
 
+        <button type="submit" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-medium py-3 rounded-lg active:scale-95 transition transform">Send feedback privately</button>
+
+        <p id="statusMsg" class="text-center text-sm text-gray-500"></p>
+      </form>
     </div>
   </div>
 
+  <!-- ─────────── JavaScript ─────────── -->
   <script>
-    /* refs */
-    const inline = document.getElementById('inlineRating');
+    /* ----- refs */
+    const starGroup = document.getElementById('starGroup');
     const modalGood = document.getElementById('modalGood');
     const modalBad  = document.getElementById('modalBad');
 
-    /* star click handler */
-    inline.addEventListener('change', e => {
-      const v = +e.target.value;
-      (v < 3 ? modalBad : modalGood).classList.remove('modal-hidden');
+    /* open proper modal depending on rating */
+    starGroup.addEventListener('change', (e) => {
+      const val = +e.target.value || 0;
+      (val >= 4 ? modalGood : modalBad).classList.remove('hidden');
     });
 
-    /* generic close handler */
-    document.querySelectorAll('[data-close]').forEach(b =>
-      b.addEventListener('click', () =>
-        b.closest('.modal-backdrop').classList.add('modal-hidden')));
+    /* close buttons */
+    document.querySelectorAll('[data-close]').forEach(btn => {
+      btn.addEventListener('click', () => btn.closest('.modal').classList.add('hidden'));
+    });
 
-    /* lightweight front‑end validation */
-    const fForm   = document.getElementById('feedbackForm');
-    const feedMsg = document.getElementById('feedMsg');
+    /* simple front‑end validation + UX */
+    const fForm = document.getElementById('feedbackForm');
+    const sMsg  = document.getElementById('statusMsg');
 
-    fForm.addEventListener('submit', ev => {
+    fForm.addEventListener('submit', (ev) => {
       if (!fForm.message.value.trim()) {
         ev.preventDefault();
-        feedMsg.textContent = 'Please write a short message before sending.';
+        sMsg.textContent = 'Please write a short message before submitting.';
       } else {
-        feedMsg.textContent = 'Sending…';
+        sMsg.textContent = 'Sending…';
       }
     });
   </script>
