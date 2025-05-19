@@ -1,108 +1,140 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth" data-theme="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Share Your Experience</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NexBiz Customer Feedback</title>
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    body{font-family:'Inter',sans-serif;}
-    /* simple fade‑scale motion */
-    .fade-enter{opacity:0;transform:scale(.95)}
-    .fade-enter-active{opacity:1;transform:scale(1);transition:all .25s ease}
-    .fade-leave{opacity:1;transform:scale(1)}
-    .fade-leave-active{opacity:0;transform:scale(.95);transition:all .2s ease}
-  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3b0764',
+            accent: '#d4af37',
+          }
+        }
+      }
+    }
+  </script>
 </head>
-<body class="bg-gradient-to-br from-sky-200 via-purple-200 to-pink-200 min-h-screen flex items-center justify-center p-6 sm:p-10">
-  <!-- Glass card -->
-  <main class="relative w-full max-w-xl rounded-3xl border border-white/20 bg-white/40 backdrop-blur-md shadow-xl overflow-hidden">
-    <!-- Decorative top bar -->
-    <div class="h-2 bg-gradient-to-r from-purple-500 to-pink-500"></div>
+<body class="bg-gradient-to-br from-primary to-indigo-900 flex items-center justify-center min-h-screen p-4">
+  <div class="bg-white bg-opacity-90 backdrop-blur-lg rounded-3xl max-w-md w-full shadow-2xl p-8">
+    <!-- Branding -->
+    <div class="text-center mb-6">
+      <h1 class="text-3xl font-bold text-primary mb-2">NexBiz</h1>
+      <p class="text-gray-700">🙏 We are dedicated to your satisfaction. We’d love your feedback to serve you better.</p>
+    </div>
 
-    <section class="px-8 pb-10 pt-12 text-center">
-      <div class="text-7xl mb-4 select-none">🙏</div>
-      <h1 class="text-3xl font-extrabold text-purple-700 mb-2 tracking-tight">Your happiness matters to us</h1>
-      <p class="text-slate-600 max-w-md mx-auto mb-8">If your experience was great, we’d be honoured by your public review. If anything felt less than perfect, let us know—our team will make it right within <strong>24 hours</strong>.</p>
-
-      <!-- CTA buttons -->
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="https://search.google.com/local/writereview?placeid=ChIJ1b_GBgC3wjsR9t-a4dIKlI4" target="_blank" rel="noopener noreferrer" class="px-8 py-3 rounded-full text-white font-semibold bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 shadow-lg shadow-emerald-500/30 active:scale-95 transition-transform">Leave a Google&nbsp;Review</a>
-
-        <button id="needHelpBtn" class="px-8 py-3 rounded-full font-semibold text-emerald-600 bg-white/70 hover:bg-white backdrop-blur-lg border border-emerald-500 shadow-md active:scale-95 transition">Need&nbsp;Help? Tell&nbsp;Us</button>
+    <!-- Step 1: Question -->
+    <div id="question-section" class="space-y-4">
+      <div class="flex items-center justify-center mb-4">
+        <span class="text-2xl mr-2">🙏</span>
+        <p class="text-lg font-medium text-gray-800">We’d love your feedback!</p>
       </div>
-    </section>
+      <h2 class="text-2xl font-semibold text-primary">Are you happy with our services?</h2>
+      <div class="flex justify-center space-x-4">
+        <button id="btnYes" class="flex-1 py-2 rounded-full bg-green-600 hover:bg-green-700 text-white font-semibold transition">Yes</button>
+        <button id="btnNo" class="flex-1 py-2 rounded-full bg-red-600 hover:bg-red-700 text-white font-semibold transition">No</button>
+      </div>
+      <p class="text-sm text-gray-500 italic">Yours faithfully, NexBiz Team</p>
+    </div>
 
-    <!-- footer note -->
-    <footer class="text-xs text-slate-500 text-center pb-6 px-8">We comply with Google and FTC guidelines—no feedback is ever hidden.</footer>
-  </main>
-
-  <!-- ✉️ Feedback Modal -->
-  <div id="modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
-    <div id="modalCard" class="fade-enter bg-white rounded-2xl w-full max-w-lg p-8 relative overflow-hidden shadow-2xl">
-      <!-- close -->
-      <button id="closeBtn" class="absolute top-3 right-3 text-slate-400 hover:text-slate-600 text-2xl leading-none">&times;</button>
-
-      <h2 class="text-2xl font-bold text-purple-700 mb-3">We’re here to help 🤝</h2>
-      <p class="text-slate-600 mb-6">Share a few details and our support team will reach out within a business day.</p>
-
-      <form id="supportForm" action="https://formsubmit.co/equimedia3@gmail.com" method="POST" class="space-y-4">
-        <textarea name="message" rows="4" required class="w-full border border-slate-300 rounded-lg p-3 focus:ring-purple-400 focus:border-purple-400" placeholder="Tell us what happened..."></textarea>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <input type="email" name="email" placeholder="Email (optional)" class="border border-slate-300 rounded-lg p-3 focus:ring-purple-400 focus:border-purple-400">
-          <input type="tel" name="phone" placeholder="Phone (optional)" class="border border-slate-300 rounded-lg p-3 focus:ring-purple-400 focus:border-purple-400">
-        </div>
-
-        <!-- hidden helpers -->
-        <input type="hidden" name="_subject" value="Private Feedback" />
-        <input type="hidden" name="_template" value="table" />
-        <input type="hidden" name="_next" value="https://nexbiz.ratemybiz.in.net/thank.html" />
-        <input type="hidden" name="_captcha" value="false" />
-        <input type="text" name="_honey" style="display:none" />
-
-        <button type="submit" class="w-full py-3 rounded-full text-white font-semibold bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-lg shadow-purple-500/30 active:scale-95 transition">Submit &amp; Get Support</button>
-
-        <p id="formMsg" class="text-center text-sm text-slate-500"></p>
+    <!-- Step 2: Feedback Form -->
+    <div id="feedback-section" class="hidden mt-6">
+      <h2 class="text-xl font-semibold text-primary mb-2">Let’s Make It Right</h2>
+      <p class="text-gray-600 mb-4">Share your thoughts to help us improve.</p>
+      <form id="feedbackForm" action="https://formsubmit.co/equimedia3@gmail.com" method="POST" class="space-y-4" aria-live="polite">
+        <textarea name="message" rows="4" required placeholder="Your feedback..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent transition"></textarea>
+        <input type="email" name="email" placeholder="Your Email (optional)" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent transition">
+        <input type="tel" name="phone" placeholder="Your Phone (optional)" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent transition">
+        <input type="hidden" name="_subject" value="Customer Feedback">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="text" name="_honey" style="display:none">
+        <button type="submit" class="w-full py-3 rounded-full bg-primary hover:bg-indigo-800 text-white font-semibold transition relative overflow-hidden">
+          Submit Feedback
+          <span id="loadingIndicator" class="hidden absolute right-4 top-1/2 transform -translate-y-1/2 loader"></span>
+        </button>
       </form>
+      <div class="mt-4 text-center">
+        <p class="text-gray-600 mb-2">Or write a public review:</p>
+        <button id="btnReview2" class="py-2 px-6 rounded-full bg-green-600 hover:bg-green-700 text-white font-semibold transition">Write a Review</button>
+      </div>
+      <p id="formStatus" class="mt-3 text-sm text-red-600 text-center"></p>
+    </div>
+
+    <!-- Step 3: Thank You -->
+    <div id="thankyou-section" class="hidden mt-6 text-center" aria-live="assertive">
+      <div class="mx-auto mb-4 w-16 h-16 flex items-center justify-center bg-green-600 rounded-full shadow-lg animate-pulse">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/>
+        </svg>
+      </div>
+      <h2 class="text-2xl font-semibold text-primary mb-2">Thank You!</h2>
+      <p class="text-gray-600 mb-4">Your feedback is invaluable. We’ll work hard to address your concerns.</p>
+      <div class="flex justify-center space-x-4">
+        <button id="btnReview3" class="py-2 px-6 rounded-full bg-green-600 hover:bg-green-700 text-white font-semibold transition">Write a Review</button>
+        <button id="btnHome" class="py-2 px-6 rounded-full bg-primary hover:bg-indigo-800 text-white font-semibold transition">Home</button>
+      </div>
     </div>
   </div>
 
   <script>
-    const modal      = document.getElementById('modal');
-    const modalCard  = document.getElementById('modalCard');
-    const openBtn    = document.getElementById('needHelpBtn');
-    const closeBtn   = document.getElementById('closeBtn');
-    const supportForm= document.getElementById('supportForm');
-    const formMsg    = document.getElementById('formMsg');
+    const googleReviewURL = 'https://search.google.com/local/writereview?placeid=ChIJ1b_GBgC3wjsR9t-a4dIKlI4';
+    const qs = s => document.getElementById(s);
+    const questionSection = qs('question-section');
+    const feedbackSection = qs('feedback-section');
+    const thankyouSection = qs('thankyou-section');
+    const feedbackForm = qs('feedbackForm');
+    const formStatus = qs('formStatus');
+    const loadingIndicator = qs('loadingIndicator');
 
-    // open modal
-    openBtn.addEventListener('click', ()=>{
-      modal.classList.remove('hidden');
-      requestAnimationFrame(()=> modalCard.classList.add('fade-enter-active'));
+    qs('btnYes').addEventListener('click', () => window.open(googleReviewURL, '_blank'));
+    qs('btnNo').addEventListener('click', () => {
+      questionSection.classList.add('hidden');
+      feedbackSection.classList.remove('hidden');
+    });
+    qs('btnReview2').addEventListener('click', () => window.open(googleReviewURL, '_blank'));  
+    qs('btnReview3').addEventListener('click', () => window.open(googleReviewURL, '_blank'));
+
+    feedbackForm.addEventListener('submit', e => {
+      e.preventDefault();
+      formStatus.textContent = '';
+      loadingIndicator.classList.remove('hidden');
+      fetch(feedbackForm.action, { method: 'POST', headers: { 'Accept': 'application/json' }, body: new FormData(feedbackForm) })
+        .then(res => res.ok ? showThankYou() : res.json().then(j => Promise.reject(j.error)))
+        .catch(err => formStatus.textContent = err)
+        .finally(() => loadingIndicator.classList.add('hidden'));
     });
 
-    // close modal
-    function close(){
-      modalCard.classList.add('fade-leave-active');
-      setTimeout(()=>{
-        modal.classList.add('hidden');
-        modalCard.classList.remove('fade-enter-active','fade-leave-active');
-      },200);
+    qs('btnHome').addEventListener('click', () => {
+      thankyouSection.classList.add('hidden');
+      feedbackSection.classList.add('hidden');
+      questionSection.classList.remove('hidden');
+      feedbackForm.reset();
+      formStatus.textContent = '';
+    });
+
+    function showThankYou() {
+      feedbackSection.classList.add('hidden');
+      questionSection.classList.add('hidden');
+      thankyouSection.classList.remove('hidden');
     }
-    closeBtn.addEventListener('click', close);
-    modal.addEventListener('click', e=>{ if(e.target===modal) close();});
-
-    // basic validation msg
-    supportForm.addEventListener('submit', e=>{
-      if(!supportForm.message.value.trim()){
-        e.preventDefault();
-        formMsg.textContent='Please describe the issue so we can assist.';
-      }else{
-        formMsg.textContent='Sending…';
-      }
-    });
   </script>
+  <style>
+    .loader {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid transparent;
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 </body>
 </html>
