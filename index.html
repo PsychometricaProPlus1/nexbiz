@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>NexBiz Customer Feedback</title>
-
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -92,12 +90,15 @@
     const formStatus = qs('formStatus');
     const loadingIndicator = qs('loadingIndicator');
 
-    qs('btnYes').addEventListener('click', () => window.open(googleReviewURL, '_blank'));
+    // ✅ Change: Redirect in same tab
+    qs('btnYes').addEventListener('click', () => window.location.href = googleReviewURL);
+
     qs('btnNo').addEventListener('click', () => {
       questionSection.classList.add('hidden');
       feedbackSection.classList.remove('hidden');
     });
-    qs('btnReview2').addEventListener('click', () => window.open(googleReviewURL, '_blank'));  
+
+    qs('btnReview2').addEventListener('click', () => window.open(googleReviewURL, '_blank'));
     qs('btnReview3').addEventListener('click', () => window.open(googleReviewURL, '_blank'));
 
     feedbackForm.addEventListener('submit', e => {
@@ -116,14 +117,17 @@
       questionSection.classList.remove('hidden');
       feedbackForm.reset();
       formStatus.textContent = '';
+      qs('btnReview3').style.display = ''; // reset visibility when going back
     });
 
     function showThankYou() {
       feedbackSection.classList.add('hidden');
       questionSection.classList.add('hidden');
       thankyouSection.classList.remove('hidden');
+      qs('btnReview3').style.display = 'none'; // ✅ Hide "Write a Review" on Thank You
     }
   </script>
+
   <style>
     .loader {
       display: inline-block;
